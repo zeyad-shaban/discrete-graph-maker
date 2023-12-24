@@ -31,19 +31,44 @@ export function checkBipartite(group1, group2) {
 }
 
 export function getBipartiteGroups() {
-    let group1 = [];
-    let group2 = [];
-
     let points = document.querySelectorAll('.point');
-    points.forEach((point, i) => {
-        group1.push(point.id);
-        getEdgesAtPoint(point.id).forEach(edge => {
-            let otherPntID = getOtherConnectedPoint(edge.id, i)
-            group2.push(otherPntID);
-        });
-    });
+    let colors = new Array(points.length).fill(-1);
+    let isBipartite = true;
 
+    for (let i = 0; i < points.length && isBipartite; ++i) {
+        if (colors[i] === -1) {
+            let queue = [];
+            queue.push(i);
+            colors[i] = 0;
 
+            while (queue.length > 0 && isBipartite) {
+                let node = queue.shift();
+                let edges = getEdgesAtPoint(node);
 
-    return [group1.join(' '), group2.join(' ')];
+                edges.forEach(edge => {
+                    let otherPntID = getOtherConnectedPoint(edge.id, node);
+                    if (colors[otherPntID] === -1) {
+                        queue.push(otherPntID);
+                        colors[otherPntID] = colors[node] ^ 1;
+                    } else if (colors[otherPntID] === colors[node]) {
+                        isBipartite = false;
+                    }
+                });
+            }
+        }
+    }
+
+    if (!isBipartite) {
+        return ['not possible', 'not possible'];
+    } else {
+        let group1 = [], group2 = [];
+        for (let i = 0; i < points.length; ++i) {
+            if (colors[i] === 0) {
+                group1.push(points[i].id);
+            } else {
+                group2.push(points[i].id);
+            }
+        }
+        return [group1.join(' '), group2.join(' ')];
+    }
 }

@@ -1,4 +1,4 @@
-import { getEdgeBetPoints, getLoopsForPoint, getEdgesAtPoint     } from "./utils.js";
+import { getEdgeBetPoints, getLoopsForPoint, getEdgesAtPoint } from "./utils.js";
 
 export function adjMatrix() {
     let matrix = [];
@@ -10,6 +10,8 @@ export function adjMatrix() {
             matrix[i][j] = getEdgeBetPoints(i, j).length + (i == j && getLoopsForPoint(i).length);
         }
     }
+    console.log("matrix: ");
+    console.log(matrix);
 }
 
 export function adjList() {
@@ -24,4 +26,6 @@ export function adjList() {
             connectedPoints[i].push(edge.id.replace('edge', '').replace(i, '').replace('_', ''));
         });
     }
+
+    console.log("Adjacency list: ", connectedPoints);
 }

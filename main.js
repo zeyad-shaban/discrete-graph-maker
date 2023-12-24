@@ -49,7 +49,7 @@ bipartiteForm.onsubmit = e => {
 
 representGraphBtn.onclick = e => {
     e.preventDefault();
-
+    alert("Results are in developer console, sorry didn't have time to implement it in a table :(");
     adjMatrix();
     adjList();
 };
